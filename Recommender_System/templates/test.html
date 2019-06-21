@@ -1,0 +1,35 @@
+<html>
+<head>
+   <meta charset="utf-8" />
+    <title>ID3 Select</title>
+</head>
+<body>
+    {% for item in product_index %}
+    <ul>
+        <li> {{ item }}</li>
+    </ul>
+    {% endfor %}
+    <form action="/ID3_select/" method="post">
+        {% csrf_token %}
+        <p>Would you like to make options about other attributes?</p>
+        <button id='btn'>yes</button>
+    </form>
+</body>
+</html>
+
+<script>
+$('btn').click(function(){
+    //预先发送csrf值，防止出现403错误
+    $.ajaxSetup({data: {csrfmiddlewaretoken: '{{ csrf_token }}'}});
+    $.ajax({
+        type: 'POST',
+        url: '/ID3_select/', //路由加'/'否则会报ssh错误
+        data: {{ product_index }},
+        dataType: 'JSON',
+        success: function(data){
+            location.reload()    //成功刷新界面
+        },
+
+    })
+})
+</script>
